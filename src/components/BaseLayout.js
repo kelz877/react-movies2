@@ -1,4 +1,4 @@
-import React, { Component} from 'react'
+import React from 'react'
 import Navigation from './Navigation'
 
 export function Footer() {
@@ -9,14 +9,15 @@ export function Footer() {
     )
 }
 
-export class BaseLayout extends Component {
-    render() {
-        return (
-            <div>
-                <Navigation />
-                {this.props.children}
-                <Footer />
-            </div>
-        )
-    }
+
+
+export function BaseLayout(props) {
+    return (
+        <div>
+        <Navigation />
+        {props.children}
+        <Footer />
+    </div>
+    )
 }
+
