@@ -13,21 +13,26 @@ import reducer from './components/store/reducer.js'
 import AddMovie from './components/AddMovie';
 import Login from './components/Login'
 import Cart from './components/Cart'
+import {setAuthenticationHeader} from './components/utils/authenticate'
+import requireAuth from './components/requireAuth'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducer, composeEnhancers(
     applyMiddleware(thunk)
 ))
 
+let token = localStorage.getItem('jsonwebtoken')
+setAuthenticationHeader(token)
+
 ReactDOM.render(
     <Provider store = {store}>
         <BrowserRouter>
             <BaseLayout>
                 <Switch>
-                    <Route path="/movies" component={MovieList} />
-                    <Route path='/add-movie' component={AddMovie} />
+                    <Route path="/movies" component={requireAuth(MovieList)} />
+                    <Route path='/add-movie' component={requireAuth(AddMovie)} />
                     <Route path='/login' component={Login} />
-                    <Route path='/cart' component={Cart} />
+                    <Route path='/cart' component={requireAuth(Cart)} />
                 </Switch>
             </BaseLayout>
         </BrowserRouter>

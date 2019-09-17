@@ -1,48 +1,50 @@
 const express = require('express')
 const app = express()
+require('dotenv').config() //initialize the dotenv configuation
+
 const models = require('./models')
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT
 
-const users = [{username: 'johndoe', password: 'password'}]
-
+const authenticate = require('./authMiddleware')
+global.users = [{username: 'johndoe', password: 'password'}]
+console.log(process.env.PORT)
 
 app.use(cors())
 app.use(express.json())
 
+app.all('/api/*', authenticate)
 
 //Middleware
-app.all('/api/*', (req,res, next)=> {
-    console.log("middleware called...")
-    let headers = req.headers['authorization']
+// app.all('/api/*', (req,res, next)=> {
+//     console.log("middleware called...")
+//     let headers = req.headers['authorization']
 
-    if(headers){
-        const token = headers.split(' ')[1]
-        console.log(token)
-        var decoded = jwt.verify(token, 'someprivatekey');
-        if(decoded){
-            const username = decoded.username
-            //check in the database id the user exists
-            const persistedUser = users.find(u => u.username === username)
-            if(persistedUser){
-                next()
-            }else{
-                res.json({error: 'Invalid Credentials'})
-            }
-        }else{
-            res.json({error: 'Unauthorized access'})
-        }
-    }else {
-        res.json({error: 'Unauthorized Access'})
-    }
-
-
+//     if(headers){
+//         const token = headers.split(' ')[1]
+//         console.log(token)
+//         var decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+//         if(decoded){
+//             const username = decoded.username
+//             //check in the database id the user exists
+//             const persistedUser = users.find(u => u.username === username)
+//             if(persistedUser){
+//                 next()
+//             }else{
+//                 res.json({error: 'Invalid Credentials'})
+//             }
+//         }else{
+//             res.json({error: 'Unauthorized access'})
+//         }
+//     }else {
+//         res.json({error: 'Unauthorized Access'})
+//     }
 
 
 
-})
+// })
 
 //get all movies
 app.get('/api/movies', (req, res) => {
@@ -58,7 +60,7 @@ app.post('/login', (req, res) => {
     let persistedUser = users.find(u => u.username === username && u.password === password)
 
     if(persistedUser) { //credentials are valid
-        var token = jwt.sign({ username: username }, 'someprivatekey');
+        var token = jwt.sign({ username: username }, process.env.JWT_SECRET_KEY);
         res.json({token: token})
     } else {
         //credentials are not valid

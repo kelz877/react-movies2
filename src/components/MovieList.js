@@ -1,16 +1,24 @@
-import React, { useEffect} from 'react'
+import React, { useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import * as actionCreators from './store/actions/actionCreators.js'
 import {withRouter} from 'react-router-dom'
-//import axios from 'axios'
+import axios from 'axios'
 
 function MovieList(props) {
     //local state 
 
-    //const [name, setName] = useState('')
+    const [movies, setMovies] = useState([])
+
+    const fetchMovies = () => {
+        axios.get('http://localhost:8080/api/movies')
+        .then(response => {
+            console.log(response.data)
+            setMovies(response.data)
+        })
+    }
 
     useEffect(() => {
-        props.onMovieDataLoaded()
+        fetchMovies()
     }, [])
 
     const deleteMovie = (id) => {
@@ -34,7 +42,7 @@ function MovieList(props) {
     }
 
     return <div>
-            {props.movieData.map(movie => {
+            {movies.map(movie => {
                 return (<div key={movie.id}>{movie.name}
                 <button onClick={()=> deleteMovie(movie.id)}>Delete</button>
                 <button onClick={() => addToCart(movie.id)}>Add to Cart</button>
@@ -45,15 +53,15 @@ function MovieList(props) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onMovieDataLoaded: () => dispatch(actionCreators.movieDataFetched()),
+        //onMovieDataLoaded: () => dispatch(actionCreators.movieDataFetched()),
         onIncrement: (id) => dispatch({type: 'COUNT_CART', payload: id})
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        movieData: state.movies
-    }
-}
+// const mapStateToProps = (state) => {
+//     return {
+//         movieData: state.movies
+//     }
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MovieList))
+export default connect(null, mapDispatchToProps)(withRouter(MovieList))

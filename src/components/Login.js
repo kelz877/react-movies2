@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import axios from 'axios'
 import {setAuthenticationHeader} from './utils/authenticate'
-
-
-function Login() {
+import {connect} from 'react-redux'
+function Login(props) {
     const [user, setUser] = useState({username: '', password: ''})
 
     const handleLogin = () => {
@@ -17,6 +16,8 @@ function Login() {
             localStorage.setItem('jsonwebtoken', token)
             //set default axios header
             setAuthenticationHeader(token)
+            //change redux  state to isAuthenticated true
+            props.onAuthenticated(token)
             console.log(response.data)
         })
     }
@@ -40,4 +41,10 @@ function Login() {
 
 }
 
-export default Login
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onAuthenticated: (token) => dispatch({type: "ON_AUTHENTICATED", token: token})
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Login)

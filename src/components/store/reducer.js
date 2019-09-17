@@ -1,7 +1,9 @@
+
 const initialState = {
     movies: [],
     counter: 0,
-    cartItems: []
+    cartItems: [],
+    isAuthenticated: false
 }
 
 const reducer = (state = initialState, action) => {
@@ -16,6 +18,17 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 counter: state.counter + 1,
                 cartItems: state.cartItems.concat(action.payload)
+            }
+        case 'ON_AUTHENTICATED':
+            return {
+                ...state,
+                isAuthenticated: action.token ? true: false
+            }
+        case 'SIGN_OUT':
+            return {
+                ...state,
+                isAuthenticated: false
+
             }
         default:
             return {
