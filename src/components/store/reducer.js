@@ -1,5 +1,7 @@
 const initialState = {
-    movies: []
+    movies: [],
+    counter: 0,
+    cartItems: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -9,8 +11,19 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 movies: action.payload
             }
+        case 'COUNT_CART':
+            return {
+                ...state,
+                counter: state.counter + 1,
+                cartItems: state.cartItems.concat(action.payload)
+            }
+        default:
+            return {
+                ...state
+            }
+          
     }
-    return state
+   
 }
 
 export default reducer

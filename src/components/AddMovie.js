@@ -14,7 +14,7 @@ class AddMovie extends Component {
         }
     }
     handleSave = () => {
-        fetch('http://localhost:8080/add-movie', {
+        fetch('http://localhost:8080/api/add-movie', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

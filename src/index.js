@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+//import App from './App';
 import {BaseLayout} from './components/BaseLayout'
 import {BrowserRouter, Switch, Route} from 'react-router-dom'
 import * as serviceWorker from './serviceWorker';
@@ -11,6 +11,8 @@ import thunk from 'redux-thunk';
 import {compose, applyMiddleware, createStore} from 'redux'
 import reducer from './components/store/reducer.js'
 import AddMovie from './components/AddMovie';
+import Login from './components/Login'
+import Cart from './components/Cart'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducer, composeEnhancers(
@@ -24,6 +26,8 @@ ReactDOM.render(
                 <Switch>
                     <Route path="/movies" component={MovieList} />
                     <Route path='/add-movie' component={AddMovie} />
+                    <Route path='/login' component={Login} />
+                    <Route path='/cart' component={Cart} />
                 </Switch>
             </BaseLayout>
         </BrowserRouter>
