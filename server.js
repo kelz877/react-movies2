@@ -10,41 +10,15 @@ const PORT = process.env.PORT
 
 const authenticate = require('./authMiddleware')
 global.users = [{username: 'johndoe', password: 'password'}]
-console.log(process.env.PORT)
 
+console.log(process.env.PORT)
+let User = require ('./user')
 app.use(cors())
 app.use(express.json())
 
 app.all('/api/*', authenticate)
 
-//Middleware
-// app.all('/api/*', (req,res, next)=> {
-//     console.log("middleware called...")
-//     let headers = req.headers['authorization']
 
-//     if(headers){
-//         const token = headers.split(' ')[1]
-//         console.log(token)
-//         var decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-//         if(decoded){
-//             const username = decoded.username
-//             //check in the database id the user exists
-//             const persistedUser = users.find(u => u.username === username)
-//             if(persistedUser){
-//                 next()
-//             }else{
-//                 res.json({error: 'Invalid Credentials'})
-//             }
-//         }else{
-//             res.json({error: 'Unauthorized access'})
-//         }
-//     }else {
-//         res.json({error: 'Unauthorized Access'})
-//     }
-
-
-
-// })
 
 //get all movies
 app.get('/api/movies', (req, res) => {
@@ -57,7 +31,7 @@ app.post('/login', (req, res) => {
     const username = req.body.username
     const password = req.body.password
 
-    let persistedUser = users.find(u => u.username === username && u.password === password)
+    let persistedUser = users.find(u => u.username == username && u.password == password)
 
     if(persistedUser) { //credentials are valid
         var token = jwt.sign({ username: username }, process.env.JWT_SECRET_KEY);
@@ -67,6 +41,18 @@ app.post('/login', (req, res) => {
         res.status(401).json({error: "Invalid credentials"})
     }
 
+})
+
+app.post('/register', (req, res) =>{
+    let username = req.body.username
+    let password = req.body.password
+
+    let user = new User( username, password)
+    console.log(user)
+    users.push(user)
+    console.log(users)
+
+    res.send('Added to Users')
 })
 
 //add movie
@@ -97,15 +83,7 @@ app.delete('/api/delete-movie', (req, res) => {
 })
 
 
-// let movie = models.Movie.build({
-//     name: "The Fifth Element",
-//     description: 'In the colorful future, a cab driver unwittingly becomes the central figure in the search for a legendary cosmic weapon to keep Evil and Mr. Zorg at bay.',
-//     year: 1997,
-//     director: "Luc Besson",
-//     image: 'https://m.media-amazon.com/images/M/MV5BZWFjYmZmZGQtYzg4YS00ZGE5LTgwYzAtZmQwZjQ2NDliMGVmXkEyXkFqcGdeQXVyNTUyMzE4Mzg@._V1_SX300.jpg'
-// })
 
-// movie.save()
 
 
 app.listen(PORT, () => {

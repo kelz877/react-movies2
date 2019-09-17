@@ -11,7 +11,7 @@ function authenticate(req, res, next) {
         if(decoded){
             const username = decoded.username
             //check in the database id the user exists
-            const persistedUser = users.find(u => u.username === username)
+            const persistedUser = users.find(u => u.username == username)
             if(persistedUser){
                 next()
             }else{

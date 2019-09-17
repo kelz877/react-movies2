@@ -12,6 +12,7 @@ import {compose, applyMiddleware, createStore} from 'redux'
 import reducer from './components/store/reducer.js'
 import AddMovie from './components/AddMovie';
 import Login from './components/Login'
+import Register from './components/Register'
 import Cart from './components/Cart'
 import {setAuthenticationHeader} from './components/utils/authenticate'
 import requireAuth from './components/requireAuth'
@@ -32,6 +33,7 @@ ReactDOM.render(
                     <Route path="/movies" component={requireAuth(MovieList)} />
                     <Route path='/add-movie' component={requireAuth(AddMovie)} />
                     <Route path='/login' component={Login} />
+                    <Route path='/register' component={Register} />
                     <Route path='/cart' component={requireAuth(Cart)} />
                 </Switch>
             </BaseLayout>

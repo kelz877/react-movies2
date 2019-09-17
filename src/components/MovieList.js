@@ -1,8 +1,11 @@
 import React, { useState, useEffect} from 'react'
 import {connect} from 'react-redux'
-import * as actionCreators from './store/actions/actionCreators.js'
+//import * as actionCreators from './store/actions/actionCreators.js'
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
+import {Card, CardDeck, CardHeader, CardTitle, CardImg, CardBody, CardFooter, Button, Container} from "shards-react"
+import "bootstrap/dist/css/bootstrap.min.css";
+import "shards-ui/dist/css/shards.min.css"
 
 function MovieList(props) {
     //local state 
@@ -41,14 +44,27 @@ function MovieList(props) {
         console.log(id)
     }
 
-    return <div>
+    return (<CardDeck>
             {movies.map(movie => {
-                return (<div key={movie.id}>{movie.name}
-                <button onClick={()=> deleteMovie(movie.id)}>Delete</button>
-                <button onClick={() => addToCart(movie.id)}>Add to Cart</button>
+                return (<div key={movie.id}>
+                <Card style={{ maxWidth: "300px"}}>
+                    <CardHeader>{movie.name}</CardHeader>
+                    <CardImg src={movie.image} />
+                    <CardBody>
+                        <CardTitle> Director: {movie.director}</CardTitle>
+                        <p>{movie.description}</p>
+                    
+                        <Button outline theme="info" onClick={()=> deleteMovie(movie.id)}>Delete</Button>
+                        <Button outline theme="info" onClick={() => addToCart(movie.id)}>Add to Cart</Button>
+                    </CardBody>    
+                    <CardFooter>{movie.year}</CardFooter>
+                </Card>
+                
+                
+
                 </div>)
             })}
-    </div>
+    </CardDeck>)
 }
 
 const mapDispatchToProps = (dispatch) => {
